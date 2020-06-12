@@ -1,23 +1,24 @@
 import React, {useState, useEffect} from 'react';
-import {
-  Text,
-  View,
-  Image,
-  Button,
-  Alert,
-  TextInput,
-  AsyncStorage,
-  StyleSheet,
-} from 'react-native';
+import {Text, View, Image, Alert, StyleSheet} from 'react-native';
 import axios from 'axios';
 
 import {OPEN_WEATHER_API_KEY} from '../constants/OpenWeatherApi';
+
+import Microphone from '../components/Microphone';
 
 const Weather = () => {
   const [loading, setLoading] = useState(false);
   const [city, setCity] = useState('hanoi');
   const [tempCity, setTempCity] = useState('');
   const [data, setData] = useState({});
+
+  const [text, setText] = React.useState(String);
+
+  React.useEffect(() => {
+    if (text) {
+      // call api to search image
+    }
+  }, [text]);
 
   // const storeData = async weatherObj => {
   //   try {
@@ -78,41 +79,53 @@ const Weather = () => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.status}>
-        {loading ? (
-          <Text>Fetching the weather data...</Text>
-        ) : (
-          <Text>Current Weather</Text>
-        )}
-      </View>
-      {data.weather && (
-        <View>
-          <View style={styles.mainWeather}>
-            <Image
-              style={styles.icon}
-              source={{
-                uri: `http://openweathermap.org/img/w/${data.weather[0].icon}.png`,
-              }}
-            />
-            <Text style={styles.mainText}>{data.weather[0].main}</Text>
-          </View>
+      <View style={styles.content}>
+        <View style={styles.status}>
+          {loading ? (
+            <Text>Fetching the weather data...</Text>
+          ) : (
+            <Text>Current Weather</Text>
+          )}
+        </View>
+        {data.weather && (
+          <View>
+            <View style={styles.mainWeather}>
+              <Image
+                style={styles.icon}
+                source={{
+                  uri: `http://openweathermap.org/img/w/${
+                    data.weather[0].icon
+                  }.png`,
+                }}
+              />
+              <Text style={styles.mainText}>{data.weather[0].main}</Text>
+            </View>
 
-          <Text style={styles.city}>{data.name}</Text>
-          <View style={styles.addition}>
-            <View style={styles.additionItem}>
-              <Text style={styles.description}>
-                {data.weather[0].description}
-              </Text>
-              <Text>
-                Temperature: {(data.main.temp - 273).toFixed(2)}&#176;
-              </Text>
-              <Text>Humidity: {data.main.humidity}%</Text>
-              <Text>Cloud: {data.clouds.all}%</Text>
+            <Text style={styles.city}>{data.name}</Text>
+            <View style={styles.addition}>
+              <View style={styles.additionItem}>
+                <Text style={styles.description}>
+                  {data.weather[0].description}
+                </Text>
+                <Text>
+                  Temperature: {(data.main.temp - 273).toFixed(2)}&#176;
+                </Text>
+                <Text>Humidity: {data.main.humidity}%</Text>
+                <Text>Cloud: {data.clouds.all}%</Text>
+              </View>
             </View>
           </View>
-        </View>
-      )}
-      <View style={styles.newCity}>
+        )}
+      </View>
+      <View style={styles.oneFlex}>
+        <Microphone
+          text={text}
+          onMicPress={() => {
+            console.log('will start recording');
+          }}
+        />
+      </View>
+      {/* <View style={styles.newCity}>
         <TextInput
           style={styles.input}
           placeholder="Enter the city"
@@ -122,7 +135,7 @@ const Weather = () => {
         <View style={styles.button}>
           <Button onPress={() => setCity(tempCity)} title="Check" />
         </View>
-      </View>
+      </View> */}
     </View>
   );
 };
@@ -130,11 +143,18 @@ const Weather = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginHorizontal: 16,
+    // marginHorizontal: 16,
     alignItems: 'center',
   },
+  content: {
+    flex: 4,
+  },
+  oneFlex: {
+    flex: 1,
+  },
   status: {
-    margin: 10,
+    margin: 20,
+    marginBottom: 50,
   },
   mainWeather: {
     // flex: 1,
@@ -150,11 +170,10 @@ const styles = StyleSheet.create({
   mainText: {
     textTransform: 'uppercase',
     fontWeight: 'bold',
-    fontSize: 30,
+    fontSize: 50,
     color: 'gray',
   },
   addition: {
-    // flex: 0.3,
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'flex-start',
@@ -164,28 +183,30 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   city: {
-    fontSize: 25,
+    fontSize: 40,
+    // marginTop: 40,
     marginRight: 10,
+    // marginBottom: 30,
     justifyContent: 'center',
     alignItems: 'center',
   },
   description: {
     textTransform: 'capitalize',
   },
-  newCity: {
-    width: 200,
-    marginTop: 20,
-    // alignItems: 'center',
-  },
-  input: {
-    borderBottomWidth: 1,
-    borderBottomColor: 'gray',
-    marginBottom: 10,
-  },
+  // newCity: {
+  //   width: 200,
+  //   marginTop: 20,
+  //   // alignItems: 'center',
+  // },
+  // input: {
+  //   borderBottomWidth: 1,
+  //   borderBottomColor: 'gray',
+  //   marginBottom: 10,
+  // },
 
-  button: {
-    width: 100,
-  },
+  // button: {
+  //   width: 100,
+  // },
 });
 
 export default Weather;

@@ -1,4 +1,0 @@
-const CLIENT_KEY = 'e781019fb4906a6ca2c0c40e';
-const CLIENT_SECRET = 'M2ipy6v77qWKUmJVZvUbwprV6imDr8hisTy7LbPh9hY';
-
-export {CLIENT_KEY, CLIENT_SECRET};
