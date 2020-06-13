@@ -1,13 +1,45 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import Voice from '@react-native-community/voice';
 
-const Microphone = ({text, onMicPress}) => {
-  const [icon, setIcon] = React.useState('microphone');
+const Microphone = ({sendKeyword}) => {
+  const [icon, setIcon] = useState('microphone');
+  const [text, setText] = useState('');
 
-  const touchIcon = () => {
-    onMicPress(icon);
-    setIcon(icon === 'microphone' ? 'pause' : 'microphone');
+  useEffect(() => {
+    if (text) {
+      sendKeyword(text);
+    }
+  }, [text]);
+
+  useEffect(() => {
+    const onSpeechResults = e => {
+      // setResult(e.value);
+      console.log(e.value);
+    };
+    Voice.onSpeechResults = onSpeechResults;
+  }, []);
+
+  const switchIcon = setIcon(icon === 'microphone' ? 'pause' : 'microphone');
+
+  const touchIcon = async () => {
+    // onMicPress(icon);
+    if (icon === 'microphone') {
+      try {
+        await Voice.start('en-US');
+        switchIcon();
+      } catch (e) {
+        console.log('start error: ' + e);
+      }
+    } else {
+      try {
+        await Voice.stop();
+        switchIcon();
+      } catch (e) {
+        console.log('stop error: ' + e);
+      }
+    }
   };
 
   return (
@@ -29,7 +61,6 @@ const Microphone = ({text, onMicPress}) => {
 const styles = StyleSheet.create({
   container_: {
     flex: 1,
-    // justifyContent: 'center',
     alignItems: 'center',
   },
   oneFlex: {

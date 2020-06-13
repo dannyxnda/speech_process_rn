@@ -1,13 +1,10 @@
 import React, {useState, useEffect} from 'react';
 import {View, StyleSheet, Image} from 'react-native';
 
-import Voice from '@react-native-community/voice';
-
 import Microphone from '../components/Microphone';
 
 const ImageSearch = () => {
-  const [text, setText] = useState(String);
-  const [result, setResult] = useState();
+  const [text, setText] = useState('');
 
   useEffect(() => {
     if (text) {
@@ -15,43 +12,13 @@ const ImageSearch = () => {
     }
   }, [text]);
 
-  useEffect(() => {
-    const onSpeechResults = e => {
-      setResult(e.value);
-    };
-    Voice.onSpeechResults = onSpeechResults;
-  }, []);
-
-  const speechRec = async currentIcon => {
-    if (currentIcon === 'microphone') {
-      // start
-      try {
-        await Voice.start('en-US');
-      } catch (e) {
-        console.log('start error: ' + e);
-      }
-    } else {
-      // stop
-      try {
-        await Voice.stop();
-      } catch (e) {
-        console.log('stop error: ' + e);
-      }
-    }
-  };
-
   return (
     <View style={styles.container}>
       <View style={styles.image_slide}>
         <Image style={styles.image} source={require('../asset/planet.jpg')} />
       </View>
       <View style={styles.oneFlex}>
-        <Microphone
-          text={text}
-          onMicPress={currentIcon => {
-            speechRec(currentIcon);
-          }}
-        />
+        <Microphone sendKeyword={t => setText(t)} />
       </View>
     </View>
   );
