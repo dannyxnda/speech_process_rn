@@ -6,8 +6,8 @@ const Microphone = ({text, onMicPress}) => {
   const [icon, setIcon] = React.useState('microphone');
 
   const touchIcon = () => {
+    onMicPress(icon);
     setIcon(icon === 'microphone' ? 'pause' : 'microphone');
-    onMicPress();
   };
 
   return (
