@@ -6,6 +6,7 @@ import Voice from '@react-native-community/voice';
 const Microphone = ({sendKeyword}) => {
   const [icon, setIcon] = useState('microphone');
   const [text, setText] = useState('');
+  const [language, setLanguage] = useState('vi-VN');
 
   useEffect(() => {
     if (text) {
@@ -16,14 +17,29 @@ const Microphone = ({sendKeyword}) => {
     };
   }, [text]);
 
-  Voice.isAvailable().then(r => console.log('avalable: ' + r));
-  // Voice.isRecognizing().then(r => console.log('recog: ' + r));
+  useEffect(() => {
+    Voice.isAvailable().then(r => console.log('avalable: ' + r));
 
-  // Voice.onSpeechResults()
-  const touchIcon = async () => {
+    const onSpeechEnd = e => {
+      console.log('end: ' + e);
+    };
+    const onSpeechError = e => {
+      console.log('error: ' + e);
+    };
+    const onSpeechResults = e => {
+      console.log('result: ' + e.value[0]);
+      setText(e.value[0]);
+    };
+
+    Voice.onSpeechEnd = onSpeechEnd;
+    Voice.onSpeechError = onSpeechError;
+    Voice.onSpeechResults = onSpeechResults;
+  }, []);
+
+  const touchMicro = async () => {
     if (icon === 'microphone') {
       try {
-        await Voice.start('en-US');
+        await Voice.start(language);
         setIcon('pause');
         console.log('start rec');
       } catch (e) {
@@ -47,8 +63,14 @@ const Microphone = ({sendKeyword}) => {
           <Text style={styles.keyword_text}>{text || '- - -'}</Text>
         </View>
       </View>
-      <View style={styles.oneFlex}>
-        <TouchableOpacity onPress={touchIcon}>
+      <View style={styles.oneFlex_}>
+        <TouchableOpacity
+          style={styles.half}
+          onPress={() => setLanguage(language === 'vi-VN' ? 'en-US' : 'vi-VN')}>
+          <Text>{language}</Text>
+          <Icon name="language" size={32} color="blue" />
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.half} onPress={touchMicro}>
           <Icon name={icon} size={50} color="red" />
         </TouchableOpacity>
       </View>
@@ -63,6 +85,16 @@ const styles = StyleSheet.create({
   },
   oneFlex: {
     flex: 1,
+  },
+  oneFlex_: {
+    // display: 'flex',
+    flexDirection: 'row',
+    flex: 1,
+  },
+  half: {
+    flexBasis: '50%',
+    alignItems: 'center',
+    // alignContent: 'center',
   },
   keyword: {
     flex: 1,

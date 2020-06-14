@@ -9,63 +9,27 @@ import Microphone from '../components/Microphone';
 const Weather = () => {
   const [loading, setLoading] = useState(false);
   const [city, setCity] = useState('hanoi');
-  const [tempCity, setTempCity] = useState('');
+  const [timestamp, setTimestamp] = useState('');
   const [data, setData] = useState({});
 
-  const [text, setText] = React.useState(String);
-
-  React.useEffect(() => {
-    if (text) {
-      // call api to search image
-    }
-  }, [text]);
-
-  // const storeData = async weatherObj => {
-  //   try {
-  //     await AsyncStorage.setItem('weatherData', JSON.stringify(weatherObj));
-  //     console.log(weatherObj);
-  //   } catch (e) {
-  //     Alert.alert('Error saving data!');
-  //   }
-  // };
-
   const apiCall = () => {
+    const d = new Date();
     axios
       .get(
         `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${OPEN_WEATHER_API_KEY}`,
       )
       .then(res => {
         setLoading(false);
-        setTempCity('');
         setCity('');
         setData(res.data);
-        // storeData(res.data);
-        // AsyncStorage.setItem('fetchedTime', new Date().getTime());
+        setTimestamp(`${d.toLocaleDateString()} ${d.toLocaleTimeString()}`);
       })
       .catch(e => {
         setLoading(false);
-        // setTempCity('');
         // setCity('');
         Alert.alert(`${e}`);
       });
   };
-
-  // useEffect(async () => {
-  //   try {
-  // const weatherDataStorage = await AsyncStorage.getItem('weatherData');
-  // const fetchedTime = await AsyncStorage.getItem('fetchedtime');
-  // console.log(fetchedTime);
-  // const now = new Date().getTime();
-  // if (weatherDataStorage && (fetchedTime + 3600 000) < now) {
-  // if (weatherDataStorage) {
-  //   setData(weatherDataStorage);
-  // } else {
-  //   apiCall();
-  // }
-  //   } catch (e) {
-  //     console.log(e);
-  //   }
-  // }, []);
 
   useEffect(() => {
     console.log(
@@ -84,7 +48,7 @@ const Weather = () => {
           {loading ? (
             <Text>Fetching the weather data...</Text>
           ) : (
-            <Text>Current Weather</Text>
+            <Text>Updated: {timestamp}</Text>
           )}
         </View>
         {data.weather && (
@@ -118,12 +82,7 @@ const Weather = () => {
         )}
       </View>
       <View style={styles.oneFlex}>
-        <Microphone
-          text={text}
-          onMicPress={() => {
-            console.log('will start recording');
-          }}
-        />
+        <Microphone sendKeyword={w => setCity(w)} />
       </View>
       {/* <View style={styles.newCity}>
         <TextInput

@@ -4,7 +4,7 @@ import {View, TouchableOpacity, StyleSheet, Image} from 'react-native';
 import Microphone from '../components/Microphone';
 
 const VideoSearch = () => {
-  const [text, setText] = useState(String);
+  const [text, setText] = useState('');
 
   useEffect(() => {
     if (text) {
@@ -18,12 +18,7 @@ const VideoSearch = () => {
         <Image style={styles.image} source={require('../asset/planet.jpg')} />
       </View>
       <View style={styles.oneFlex}>
-        <Microphone
-          text={text}
-          onMicPress={() => {
-            console.log('button works');
-          }}
-        />
+        <Microphone sendKeyword={w => setText(w)} />
       </View>
     </View>
   );
