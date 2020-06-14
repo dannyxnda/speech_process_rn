@@ -18,7 +18,7 @@ const ImageSearch = () => {
         <Image style={styles.image} source={require('../asset/planet.jpg')} />
       </View>
       <View style={styles.oneFlex}>
-        <Microphone sendKeyword={t => setText(t)} />
+        <Microphone sendKeyword={t => console.log('keyword sent: ' + t)} />
       </View>
     </View>
   );

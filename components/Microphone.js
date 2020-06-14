@@ -11,31 +11,29 @@ const Microphone = ({sendKeyword}) => {
     if (text) {
       sendKeyword(text);
     }
+    return () => {
+      Voice.destroy().then(Voice.removeAllListeners);
+    };
   }, [text]);
 
-  useEffect(() => {
-    const onSpeechResults = e => {
-      // setResult(e.value);
-      console.log(e.value);
-    };
-    Voice.onSpeechResults = onSpeechResults;
-  }, []);
+  Voice.isAvailable().then(r => console.log('avalable: ' + r));
+  // Voice.isRecognizing().then(r => console.log('recog: ' + r));
 
-  const switchIcon = setIcon(icon === 'microphone' ? 'pause' : 'microphone');
-
+  // Voice.onSpeechResults()
   const touchIcon = async () => {
-    // onMicPress(icon);
     if (icon === 'microphone') {
       try {
         await Voice.start('en-US');
-        switchIcon();
+        setIcon('pause');
+        console.log('start rec');
       } catch (e) {
         console.log('start error: ' + e);
       }
     } else {
       try {
         await Voice.stop();
-        switchIcon();
+        setIcon('microphone');
+        console.log('stop rec');
       } catch (e) {
         console.log('stop error: ' + e);
       }

@@ -57,9 +57,9 @@ const Route = () => {
         activeTintColor: 'blue',
         inactiveTintColor: 'gray',
       }}>
-      <Tab.Screen name="Weather" component={WeatherStack} />
+      {/* <Tab.Screen name="Weather" component={WeatherStack} /> */}
       <Tab.Screen name="Image" component={ImageStack} />
-      <Tab.Screen name="Video" component={VideoStack} />
+      {/* <Tab.Screen name="Video" component={VideoStack} /> */}
     </Tab.Navigator>
   );
 };
