@@ -79,6 +79,8 @@ target 'xltn' do
 
   pod 'react-native-voice', :path => '../node_modules/@react-native-community/voice'
 
+  pod 'react-native-webview', :path => '../node_modules/react-native-webview'
+
   target 'xltnTests' do
     inherit! :complete
     # Pods for testing

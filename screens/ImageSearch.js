@@ -1,26 +1,33 @@
 import React, {useState, useEffect} from 'react';
 import {View, StyleSheet, Image} from 'react-native';
+import {WebView} from 'react-native-webview';
 
-import Microphone from '../components/Microphone';
+const ImageSearch = ({route}) => {
+  // const [text, setText] = useState('');
 
-const ImageSearch = () => {
-  const [text, setText] = useState('');
+  // useEffect(() => {
+  //   if (text) {
+  //     // call api to search image
+  //   }
+  // }, [text]);
 
-  useEffect(() => {
-    if (text) {
-      // call api to search image
-    }
-  }, [text]);
+  // return (
+  //   <View style={styles.container}>
+  //     <View style={styles.image_slide}>
+  //       <Image style={styles.image} source={require('../asset/planet.jpg')} />
+  //     </View>
+  //   </View>
+  // );
 
   return (
-    <View style={styles.container}>
-      <View style={styles.image_slide}>
-        <Image style={styles.image} source={require('../asset/planet.jpg')} />
-      </View>
-      <View style={styles.oneFlex}>
-        <Microphone sendKeyword={t => console.log('keyword sent: ' + t)} />
-      </View>
-    </View>
+    <WebView
+      source={{
+        uri: `https://www.google.com/search?q=${
+          route.params.text
+        }&sxsrf=ALeKk02uMIddHWjjM-4zEVU9zxnmwHw2Bg:1592568331244&source=lnms&tbm=isch&sa=X&ved=2ahUKEwiq76et643qAhXaA4gKHUd8DvgQ_AUoAXoECA8QAw&biw=1920&bih=976`,
+      }}
+      // source={{html: '<h1>love<h1>'}}
+    />
   );
 };
 

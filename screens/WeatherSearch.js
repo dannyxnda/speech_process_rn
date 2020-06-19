@@ -2,53 +2,49 @@ import React, {useState, useEffect} from 'react';
 import {Text, View, Image, Alert, StyleSheet} from 'react-native';
 import axios from 'axios';
 
-import {OPEN_WEATHER_API_KEY} from '../constants/OpenWeatherApi';
+import {OPEN_WEATHER_API_KEY} from '../constants/apiKey';
 
-import Microphone from '../components/Microphone';
-
-const Weather = () => {
+const Weather = ({route, navigation}) => {
   const [loading, setLoading] = useState(false);
-  const [city, setCity] = useState('hanoi');
   const [timestamp, setTimestamp] = useState('');
   const [data, setData] = useState({});
+  const [error, setError] = useState(false);
 
   const apiCall = () => {
     const d = new Date();
     axios
       .get(
-        `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${OPEN_WEATHER_API_KEY}`,
+        `http://api.openweathermap.org/data/2.5/weather?q=${
+          route.params.text
+        }&appid=${OPEN_WEATHER_API_KEY}`,
       )
       .then(res => {
         setLoading(false);
-        setCity('');
         setData(res.data);
         setTimestamp(`${d.toLocaleDateString()} ${d.toLocaleTimeString()}`);
       })
       .catch(e => {
         setLoading(false);
-        // setCity('');
+        setError(true);
         Alert.alert(`${e}`);
       });
   };
 
   useEffect(() => {
-    console.log(
-      `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${OPEN_WEATHER_API_KEY}`,
-    );
-    if (city) {
-      setLoading(true);
-      apiCall();
-    }
-  }, [city]);
+    apiCall();
+  }, []);
 
   return (
     <View style={styles.container}>
       <View style={styles.content}>
         <View style={styles.status}>
-          {loading ? (
-            <Text>Fetching the weather data...</Text>
-          ) : (
-            <Text>Updated: {timestamp}</Text>
+          {loading && <Text>Fetching the weather data...</Text>}
+          {!!timestamp && <Text>Updated: {timestamp}</Text>}
+          {error && (
+            <View>
+              <Image source={require('../asset/planet.jpg')} />
+              <Text>Error :((</Text>
+            </View>
           )}
         </View>
         {data.weather && (
@@ -81,20 +77,6 @@ const Weather = () => {
           </View>
         )}
       </View>
-      <View style={styles.oneFlex}>
-        <Microphone sendKeyword={w => setCity(w)} />
-      </View>
-      {/* <View style={styles.newCity}>
-        <TextInput
-          style={styles.input}
-          placeholder="Enter the city"
-          onChangeText={text => setTempCity(text)}
-          value={tempCity}
-        />
-        <View style={styles.button}>
-          <Button onPress={() => setCity(tempCity)} title="Check" />
-        </View>
-      </View> */}
     </View>
   );
 };
