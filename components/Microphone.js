@@ -119,6 +119,7 @@ const Microphone = ({navigation}) => {
       <View style={styles.oneFlex_}>
         <View style={styles.controlPart}>
           <TouchableOpacity
+            style={{alignItems: 'center'}}
             onPress={() =>
               setLanguage(language === 'vi-VN' ? 'en-US' : 'vi-VN')
             }>

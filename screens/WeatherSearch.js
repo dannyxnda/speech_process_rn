@@ -10,17 +10,19 @@ const Weather = ({route, navigation}) => {
   const [data, setData] = useState({});
   const [error, setError] = useState(false);
 
-  const apiCall = () => {
+  const getWeather = () => {
     const d = new Date();
-    axios
-      .get(
-        `http://api.openweathermap.org/data/2.5/weather?q=${
-          route.params.text
-        }&appid=${OPEN_WEATHER_API_KEY}`,
-      )
-      .then(res => {
+
+    fetch(
+      `http://api.openweathermap.org/data/2.5/weather?q=${
+        route.params.text
+      }&appid=${OPEN_WEATHER_API_KEY}`,
+    )
+      .then(response => response.json())
+      .then(resJson => {
+        console.log(resJson);
         setLoading(false);
-        setData(res.data);
+        setData(resJson);
         setTimestamp(`${d.toLocaleDateString()} ${d.toLocaleTimeString()}`);
       })
       .catch(e => {
@@ -31,7 +33,7 @@ const Weather = ({route, navigation}) => {
   };
 
   useEffect(() => {
-    apiCall();
+    getWeather();
   }, []);
 
   return (
