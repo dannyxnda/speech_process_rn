@@ -28,12 +28,12 @@ const MicrophoneStack = () => {
       <Stack.Screen
         name="ImageSearch"
         component={ImageSearch}
-        options={{title: 'Search for images'}}
+        options={({route}) => ({title: `"${route.params.text}"`})}
       />
       <Stack.Screen
         name="VideoSearch"
         component={VideoSearch}
-        options={{title: 'Search for videos'}}
+        options={({route}) => ({title: `"${route.params.text}"`})}
       />
     </Stack.Navigator>
   );

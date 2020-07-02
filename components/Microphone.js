@@ -8,18 +8,7 @@ const Microphone = ({navigation}) => {
   const [text, setText] = useState('');
   const [language, setLanguage] = useState('vi-VN');
 
-  // useEffect(() => {
-  //   if (text) {
-  //     sendKeyword(text);
-  //   }
-  //   return () => {
-  //     Voice.destroy().then(Voice.removeAllListeners);
-  //   };
-  // }, [text]);
-
   useEffect(() => {
-    // Voice.isAvailable().then(r => console.log('avalable: ' + r));
-
     const onSpeechStart = e => {
       setIcon('pause');
     };
@@ -35,7 +24,6 @@ const Microphone = ({navigation}) => {
       setIcon('microphone');
 
       setText(e.value[0]);
-      // Voice.destroy().then(Voice.removeAllListeners);
     };
 
     Voice.onSpeechStart = onSpeechStart;
@@ -64,8 +52,6 @@ const Microphone = ({navigation}) => {
       console.log('...processing');
     }
   };
-
-  const Divider = () => <View style={styles.divider} />;
 
   return (
     <View style={styles.container_}>
@@ -156,9 +142,6 @@ const styles = StyleSheet.create({
   threeFlex: {
     flex: 3,
     alignItems: 'center',
-    // borderBottomWidth: 1,
-    // borderBottomColor: 'blue',
-    // backgroundColor: 'red',
   },
   twoFlex: {
     flex: 2,
@@ -166,9 +149,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   div: {
-    // flex: 1,
-    // justifyContent: 'center',
-    // alignItems: 'center',
     borderBottomWidth: 1,
     borderBottomColor: 'blue',
   },
@@ -188,7 +168,6 @@ const styles = StyleSheet.create({
   controlPart: {
     flexBasis: '33%',
     alignItems: 'center',
-    // alignContent: 'center',
   },
   keyword: {
     flex: 1,
@@ -201,7 +180,6 @@ const styles = StyleSheet.create({
     fontSize: 30,
     borderBottomWidth: 3,
     borderBottomColor: '#515A6B',
-    // paddingBottom: 20,
     color: '#515A6B',
   },
   divider: {
