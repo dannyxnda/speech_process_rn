@@ -9,11 +9,12 @@
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import Route from './Route';
-
+ //test
 const App: () => React$Node = () => {
   return (
     <NavigationContainer>
       <Route />
+     
     </NavigationContainer>
   );
 };
